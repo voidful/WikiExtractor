@@ -1,0 +1,5 @@
+gensim
+tqdm
+nlp2
+opencc-python-reimplemented
+bz2file
