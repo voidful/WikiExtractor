@@ -16,7 +16,7 @@ pip install wikiext
 wikiext -h
 usage: wikiext [-h] [--lang LANG]
                [--dump {redirect_pair,langlink,category,articles,all} [{redirect_pair,langlink,category,articles,all} ...]]
-               [--savedir SAVEDIR] [--type {csv,dict}]
+               [--savedir SAVEDIR] [--type {csv,dict}] [--s2t]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -26,6 +26,8 @@ optional arguments:
                         select what to extract
   --savedir SAVEDIR     save dir, default /dump_result
   --type {csv,dict}
+  --s2t                 simplify chinese to traditional chinese
+
 ```
 
 

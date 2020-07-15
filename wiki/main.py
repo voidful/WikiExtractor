@@ -17,11 +17,11 @@ cc = OpenCC('s2t')
 class WikiDump:
     wiki_pages = None
 
-    def __init__(self, language_source, c2t=False):
+    def __init__(self, language_source, s2t=False):
         self.folder = get_dir_with_notexist_create('./source/')
         self.language_source = language_source
         self.download_address = "https://dumps.wikimedia.org/" + language_source + "/latest/"
-        self.c2t = c2t
+        self.s2t = s2t
         request = requests.get(self.download_address)
         if request.status_code != 200:
             raise FileNotFoundError("source not found")
@@ -36,7 +36,7 @@ class WikiDump:
         s = re.sub('\n+', '\n', s)
         s = re.sub('\n[:;]|\n +', '\n', s)
         s = re.sub('(==+)', '\n', s)
-        if self.c2t is True:
+        if self.s2t is True:
             return cc.convert(d[0]).strip(), cc.convert(s).strip()
         else:
             return d[0].strip(), s.strip()
