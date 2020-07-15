@@ -108,7 +108,7 @@ class WikiDump:
             writer = csv.writer(output)
         for d in self._extract_article_onebyone():
             title, context = self._clean(d)
-            context = "\n".join(split_sentence_to_array(clean_httplink(context)))
+            context = clean_all(context)
             if type == "csv":
                 writer.writerow([title, context])
             elif type == "text":
