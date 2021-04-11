@@ -35,8 +35,8 @@ optional arguments:
 
 ### init
 ```
-from wiki import *
-wiki = WikiDump(language_source="zh_yuewiki", c2t=False)
+from wiki import WikiDump
+wiki = WikiDump(language_source="zh_yuewiki", s2t=False)
 ```
 Arguments    
 - `language_source(String)` : example:"zhwiki",all of the code can find it on https://dumps.wikimedia.org/backup-index-bydb.html      

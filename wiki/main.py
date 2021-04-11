@@ -85,74 +85,70 @@ class WikiDump:
         return down_result
 
     def dump_redirect_pair(self, outfile, type="csv"):
-        output = codecs.open(outfile, 'w', encoding='utf-8')
-        if type == "csv":
-            writer = csv.writer(output)
-        regex = r"\[\[(.+)\]\]|\{\{(.+)\}\}"
-        for d in self._extract_article_onebyone():
-            matches = re.finditer(regex, d[1], re.MULTILINE)
-            for matchNum, match in enumerate(matches):
-                if match is not None and matchNum is not None:
-                    groups = match.groups()
-                    if groups[0] is not None and matchNum is 0 and "#" not in groups[0]:
-                        if type == "csv":
-                            writer.writerow([d[0], groups[0]])
-                        elif type == "dict":
-                            output.write(d[0] + '\n')
-                            output.write(groups[0] + '\n')
-        output.close()
+        with open(outfile, 'w', encoding='utf-8') as output:
+            if type == "csv":
+                writer = csv.writer(output)
+            regex = r"\[\[(.+)\]\]|\{\{(.+)\}\}"
+            for d in self._extract_article_onebyone():
+                matches = re.finditer(regex, d[1], re.MULTILINE)
+                for matchNum, match in enumerate(matches):
+                    if match is not None and matchNum is not None:
+                        groups = match.groups()
+                        if groups[0] is not None and matchNum is 0 and "#" not in groups[0]:
+                            if type == "csv":
+                                writer.writerow([d[0], groups[0]])
+                            elif type == "dict":
+                                output.write(d[0] + '\n')
+                                output.write(groups[0] + '\n')
 
     def dump_articles(self, outfile, type="csv"):
-        output = codecs.open(outfile, 'w', encoding='utf-8')
-        if type == "csv":
-            writer = csv.writer(output)
-        for d in self._extract_article_onebyone():
-            title, context = self._clean(d)
-            context = clean_all(context)
+        with open(outfile, 'w', encoding='utf-8') as output:
             if type == "csv":
-                writer.writerow([title, context])
-            elif type == "text":
-                output.write(title + " " + context)
-                output.write("\n")
-
-        output.close()
+                writer = csv.writer(output)
+            for d in self._extract_article_onebyone():
+                title, context = self._clean(d)
+                context = clean_all(context)
+                if type == "csv":
+                    writer.writerow([title, context])
+                elif type == "text":
+                    output.write(title + " " + context)
+                    output.write("\n")
 
     def dump_category(self, outfile, type="csv", must="", may=[""]):
-        output = codecs.open(outfile, 'w', encoding='utf-8')
-        if type == "csv":
-            writer = csv.writer(output)
-        regex = r"\[\[Category:\w*\]\]"
-        for d in self._extract_article_onebyone():
-            matches = re.finditer(regex, d[1], re.MULTILINE)
-            for matchNum, match in enumerate(matches):
-                if match is not None and matchNum is not None:
-                    key = match.group(0)
-                    if type == "csv":
-                        writer.writerow([d[0], key.replace("[[Category:", "").replace("]]", "")])
-                    elif type == "dict":
-                        output.write(d[0] + '\n')
-                    # if len(must) < 1 or must in key:
-                    #     if len(may) < 1 or key in may:
-                    #         if type == "csv":
-                    #             writer.writerow([d[0], key.replace("[[Category:", "").replace("]]", "")])
-                    #         elif type == "dict":
-                    #             output.write(d[0] + '\n')
-        output.close()
+        with open(outfile, 'w', encoding='utf-8') as output:
+            if type == "csv":
+                writer = csv.writer(output)
+            regex = r"\[\[Category:\w*\]\]"
+            for d in self._extract_article_onebyone():
+                matches = re.finditer(regex, d[1], re.MULTILINE)
+                for matchNum, match in enumerate(matches):
+                    if match is not None and matchNum is not None:
+                        key = match.group(0)
+                        if type == "csv":
+                            writer.writerow([d[0], key.replace("[[Category:", "").replace("]]", "")])
+                        elif type == "dict":
+                            output.write(d[0] + '\n')
+                        # if len(must) < 1 or must in key:
+                        #     if len(may) < 1 or key in may:
+                        #         if type == "csv":
+                        #             writer.writerow([d[0], key.replace("[[Category:", "").replace("]]", "")])
+                        #         elif type == "dict":
+                        #             output.write(d[0] + '\n')
 
     def dump_langlink(self, outfile, type="csv"):
-        output = codecs.open(outfile, 'w', encoding='utf-8')
-        jsondict = defaultdict(list)
+        with open(outfile, 'w', encoding='utf-8') as output:
+            jsondict = defaultdict(list)
 
-        if type == "csv":
-            writer = csv.writer(output)
-        infile = self.download_wiki_langlink()
-        print("loop all lang")
-        for rows in sql2csv(infile):
-            for row in rows:
-                if type == "csv":
-                    writer.writerow(row)
-                elif type == "dict":
-                    jsondict[row[1]].append(row)
+            if type == "csv":
+                writer = csv.writer(output)
+            infile = self.download_wiki_langlink()
+            print("loop all lang")
+            for rows in sql2csv(infile):
+                for row in rows:
+                    if type == "csv":
+                        writer.writerow(row)
+                    elif type == "dict":
+                        jsondict[row[1]].append(row)
 
         # if type == "dict":
         #     targetid = []
@@ -166,4 +162,3 @@ class WikiDump:
         #         for i in jsondict[key]:
         #             if i[0] in targetid and len(i[2]) > 1:
         #                 output.write(i[2] + '\n')
-        output.close()

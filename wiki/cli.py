@@ -1,8 +1,9 @@
 import argparse
+import os
 
 import nlp2
 
-from wiki import *
+from wiki import WikiDump
 
 
 def main():
