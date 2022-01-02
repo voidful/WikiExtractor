@@ -1,16 +1,19 @@
-#  📂 WikiExtractor 💡
+# 📂 WikiExtractor 💡
 
-Dumping hole wiki content,which can : 
+Dumping hole wiki content,which can :
+
 - clean unused symbol,mark,label
 - extract knowledge - synonym,concept,relationship
 
-這是一個wiki的預處理工具，可以:
-- 清理wiki中沒有用的内容：標簽，符號...
+這是一個 wiki 的預處理工具，可以:
+
+- 清理 wiki 中沒有用的内容：標簽，符號...
 - 提取出一些有用的知識：同義詞，關係，翻譯
 
 ## Usage
 
-How to use:  
+How to use:
+
 ```
 pip install wikiext
 wikiext -h
@@ -30,26 +33,30 @@ optional arguments:
 
 ```
 
-
 # Function
 
 ### init
+
 ```
 from wiki import WikiDump
 wiki = WikiDump(language_source="zh_yuewiki", s2t=False)
 ```
-Arguments    
-- `language_source(String)` : example:"zhwiki",all of the code can find it on https://dumps.wikimedia.org/backup-index-bydb.html      
-- `c2t(Boolean)` : translate all text to traditional or not
 
+Arguments
+
+- `language_source(String)` : example:"zhwiki",all of the code can find it on https://dumps.wikimedia.org/backup-index-bydb.html
+- `s2t(Boolean)` : translate all text to traditional or not
 
 ### dump_articles(outfile, type="csv")
-Arguments    
-- `outfile(String)` : name of output file   
+
+Arguments
+
+- `outfile(String)` : name of output file
 - `type(String)` : csv or text
-Result  
+  Result
+
 ```
-csv : 
+csv :
 數學,"歐幾裏得，西元前三世紀的古希臘數學家，現在被認為是幾何之父，此畫為拉斐爾的作品《雅典學院》。
 數學是利用符號語言研究數量、結構、變化以及空間等概念的一門學科，從某種角度看屬於形式科學的一種。數學透過抽象化和邏輯推理的使用，由計數、計算、量度和對物體形狀及運動的觀察而產生。數學家們拓展這些概念，為了公式化新的猜想以及從選定的公理及定義中建立起嚴謹推導出的定理。
 ......
@@ -61,11 +68,14 @@ text :
 ```
 
 ### dump_redirect_pair(outfile, type)
+
 get all redirect pair
-Arguments    
-- `outfile(String)` : name of output file   
+Arguments
+
+- `outfile(String)` : name of output file
 - `type(String)` : csv or dict
-Result  
+  Result
+
 ```
 csv:
 origin.redirect to
@@ -106,14 +116,17 @@ Earth 2160
 盖勒吉利耶省
 ```
 
-###  dump_langlink(outfile, type):  
-Arguments    
-- `outfile(String)` : name of output file    
+### dump_langlink(outfile, type):
+
+Arguments
+
+- `outfile(String)` : name of output file
 - `type(String)` : csv or dict
 
+### dump_category(outfile, type="csv"):
 
-### dump_category(outfile, type="csv"):  
 use this to extract specific categories noun
-Arguments  
-- `outfile(String)` : name of output file    
+Arguments
+
+- `outfile(String)` : name of output file
 - `type(String)` : csv or dict
