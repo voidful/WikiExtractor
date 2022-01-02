@@ -40,7 +40,7 @@ wiki = WikiDump(language_source="zh_yuewiki", s2t=False)
 ```
 Arguments    
 - `language_source(String)` : example:"zhwiki",all of the code can find it on https://dumps.wikimedia.org/backup-index-bydb.html      
-- `c2t(Boolean)` : translate all text to traditional or not
+- `s2t(Boolean)` : translate all text to traditional or not
 
 
 ### dump_articles(outfile, type="csv")
