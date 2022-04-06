@@ -1,15 +1,16 @@
+import gzip
+import re
+import shutil
 from collections import defaultdict
 
-from gensim.corpora.wikicorpus import extract_pages, filter_wiki
-from tqdm import tqdm
 import bz2file
-from nlp2 import *
 import requests
-import gzip
-import shutil
-from .sql2csv import *
-
+from gensim.corpora.wikicorpus import extract_pages, filter_wiki
+from nlp2 import get_dir_with_notexist_create, is_file_exist, create_new_dir_always, download_file, clean_all
 from opencc import OpenCC
+from tqdm import tqdm
+
+from .sql2csv import *
 
 cc = OpenCC('s2t')
 
@@ -83,6 +84,13 @@ class WikiDump:
         if down_result == "File not found":
             raise FileNotFoundError("source not found")
         return down_result
+
+    def dump_entity(self, outfile, type="csv"):
+        with open(outfile, 'w', encoding='utf-8') as output:
+            if type == "csv":
+                writer = csv.writer(output)
+            for d in self._extract_article_onebyone():
+                writer.writerow([d[0]])
 
     def dump_redirect_pair(self, outfile, type="csv"):
         with open(outfile, 'w', encoding='utf-8') as output:
