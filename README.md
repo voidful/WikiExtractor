@@ -18,14 +18,14 @@ How to use:
 pip install wikiext
 wikiext -h
 usage: wikiext [-h] [--lang LANG]
-               [--dump {redirect_pair,langlink,category,articles,all} [{redirect_pair,langlink,category,articles,all} ...]]
+               [--dump {entity, redirect_pair,langlink,category,articles,all} [{redirect_pair,langlink,category,articles,all} ...]]
                [--savedir SAVEDIR] [--type {csv,dict}] [--s2t]
 
 optional arguments:
   -h, --help            show this help message and exit
   --lang LANG           default:zhwiki, from
                         https://dumps.wikimedia.org/backup-index-bydb.html
-  --dump {redirect_pair,langlink,category,articles,all} [{redirect_pair,langlink,category,articles,all} ...]
+  --dump {entity, redirect_pair,langlink,category,articles,all} [{redirect_pair,langlink,category,articles,all} ...]
                         select what to extract
   --savedir SAVEDIR     save dir, default /dump_result
   --type {csv,dict}
@@ -38,8 +38,8 @@ optional arguments:
 ### init
 
 ```
-from wiki import WikiDump
-wiki = WikiDump(language_source="zh_yuewiki", s2t=False)
+from wiki import WikiExt
+wiki = WikiExt(language_source="zh_yuewiki", s2t=False)
 ```
 
 Arguments
@@ -115,6 +115,14 @@ Earth 2160
 盖勒吉利耶
 盖勒吉利耶省
 ```
+
+### dump_entity(outfile, type):
+
+Arguments
+
+- `outfile(String)` : name of output file
+- `type(String)` : csv or dict
+
 
 ### dump_langlink(outfile, type):
 

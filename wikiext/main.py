@@ -1,28 +1,32 @@
+import argparse
+import csv
 import gzip
+import os
 import re
 import shutil
 from collections import defaultdict
 
 import bz2file
+import nlp2
 import requests
 from gensim.corpora.wikicorpus import extract_pages, filter_wiki
 from nlp2 import get_dir_with_notexist_create, is_file_exist, create_new_dir_always, download_file, clean_all
 from opencc import OpenCC
 from tqdm import tqdm
 
-from .sql2csv import *
-
-cc = OpenCC('s2t')
+from wikiext.utility.sql2csv import sql2csv
 
 
-class WikiDump:
+class WikiExt:
     wiki_pages = None
 
     def __init__(self, language_source, s2t=False):
         self.folder = get_dir_with_notexist_create('./source/')
         self.language_source = language_source
         self.download_address = "https://dumps.wikimedia.org/" + language_source + "/latest/"
-        self.s2t = s2t
+        if s2t:
+            self.cc = OpenCC('s2t')
+            self.s2t = s2t
         request = requests.get(self.download_address)
         if request.status_code != 200:
             raise FileNotFoundError("source not found")
@@ -37,8 +41,8 @@ class WikiDump:
         s = re.sub('\n+', '\n', s)
         s = re.sub('\n[:;]|\n +', '\n', s)
         s = re.sub('(==+)', '\n', s)
-        if self.s2t is True:
-            return cc.convert(d[0]).strip(), cc.convert(s).strip()
+        if self.s2t:
+            return self.cc.convert(d[0]).strip(), self.cc.convert(s).strip()
         else:
             return d[0].strip(), s.strip()
 
@@ -96,13 +100,13 @@ class WikiDump:
         with open(outfile, 'w', encoding='utf-8') as output:
             if type == "csv":
                 writer = csv.writer(output)
-            regex = r"\[\[(.+)\]\]|\{\{(.+)\}\}"
+            regex = r"\{\{(\w+)\}\}|\[\[(\w+)\]\]"
             for d in self._extract_article_onebyone():
                 matches = re.finditer(regex, d[1], re.MULTILINE)
                 for matchNum, match in enumerate(matches):
                     if match is not None and matchNum is not None:
                         groups = match.groups()
-                        if groups[0] is not None and matchNum is 0 and "#" not in groups[0]:
+                        if groups[0] and matchNum == 0 and "#" not in groups[0]:
                             if type == "csv":
                                 writer.writerow([d[0], groups[0]])
                             elif type == "dict":
@@ -170,3 +174,32 @@ class WikiDump:
         #         for i in jsondict[key]:
         #             if i[0] in targetid and len(i[2]) > 1:
         #                 output.write(i[2] + '\n')
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--lang", type=str, default='zhwiki',
+                        help="default:zhwiki, from https://dumps.wikimedia.org/backup-index-bydb.html")
+    parser.add_argument("--dump", type=str, nargs='+', default=['all'], help="select what to extract",
+                        choices=['entity', 'redirect_pair', 'langlink', 'category', 'articles', 'all'])
+    parser.add_argument("--savedir", type=str, default="dump_result/", help="save dir, default /dump_result")
+    parser.add_argument("--type", type=str, default="csv", choices=['csv', 'dict'])
+    parser.add_argument("--s2t", action='store_true')
+
+    arg = parser.parse_args()
+    savedir = nlp2.get_dir_with_notexist_create(arg.savedir)
+    wiki = WikiExt(language_source=arg.lang, s2t=arg.s2t)
+    if 'entity' in arg.dump or 'all' in arg.dump:
+        wiki.dump_entity(os.path.join(savedir, arg.lang + '_entity.' + arg.type), type=arg.type)
+    if 'redirect_pair' in arg.dump or 'all' in arg.dump:
+        wiki.dump_redirect_pair(os.path.join(savedir, arg.lang + '_redirect.' + arg.type), type=arg.type)
+    if 'langlink' in arg.dump or 'all' in arg.dump:
+        wiki.dump_langlink(os.path.join(savedir, arg.lang + '_translate.' + arg.type), type=arg.type)
+    if 'category' in arg.dump or 'all' in arg.dump:
+        wiki.dump_category(os.path.join(savedir, arg.lang + '_categories.' + arg.type), type=arg.type)
+    if 'articles' in arg.dump or 'all' in arg.dump:
+        wiki.dump_articles(os.path.join(savedir, arg.lang + '_wiki_article.' + arg.type), type=arg.type)
+
+
+if __name__ == "__main__":
+    main()

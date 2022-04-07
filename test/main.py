@@ -1,14 +1,14 @@
 import unittest
-from wiki import *
+from wikiext.main import WikiExt
 
 
 class Test(unittest.TestCase):
 
     def test_wiki_load_not_exist(self):
-        self.assertRaises(FileNotFoundError, WikiDump, 'abc')
+        self.assertRaises(FileNotFoundError, WikiExt, 'abc')
 
     def test_check_outdated(self):
-        wiki = WikiDump("zhwiki")
+        wiki = WikiExt("zhwiki")
         self.assertTrue(wiki.check_outdated() is False)
 
 

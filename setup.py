@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='wikiext',
-    version='0.0.6',
+    version='0.0.7',
     description='Wiki Extractor ',
     url='https://github.com/voidful/WikiExtractor',
     author='Voidful',
@@ -17,7 +17,7 @@ setup(
         'Programming Language :: Python :: 3.5'
     ],
     license="Apache",
-    keywords='wiki wikiextactor extractor',
+    keywords='wikiext wikiextactor extractor',
     packages=find_packages(),
     install_requires=[
         "gensim",
@@ -27,7 +27,7 @@ setup(
         "opencc-python-reimplemented"
     ],
     entry_points={
-        'console_scripts': ['wikiext=wiki.cli:main']
+        'console_scripts': ['wikiext=wikiext.main:main']
     },
     python_requires=">=3.0",
     zip_safe=False,
