@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='wikiext',
-    version='0.0.7',
+    version='0.0.11',
     description='Wiki Extractor ',
     url='https://github.com/voidful/WikiExtractor',
     author='Voidful',

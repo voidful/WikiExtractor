@@ -1,1 +1,1 @@
-import wikiext.utility
+from wikiext.main import WikiExt

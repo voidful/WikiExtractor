@@ -46,7 +46,7 @@ class WikiExt:
         else:
             return d[0].strip(), s.strip()
 
-    def _extract_article_onebyone(self):
+    def extract_article_onebyone(self):
         wiki_pages = extract_pages(bz2file.open(self.download_wiki_articles_dump()))
         counter = 0
         w = tqdm(wiki_pages, desc=u'get 0 article')
