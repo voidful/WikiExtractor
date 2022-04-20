@@ -93,7 +93,7 @@ class WikiExt:
         with open(outfile, 'w', encoding='utf-8') as output:
             if type == "csv":
                 writer = csv.writer(output)
-            for d in self._extract_article_onebyone():
+            for d in self.extract_article_onebyone():
                 writer.writerow([d[0]])
 
     def dump_redirect_pair(self, outfile, type="csv"):
@@ -101,7 +101,7 @@ class WikiExt:
             if type == "csv":
                 writer = csv.writer(output)
             regex = r"\{\{(\w+)\}\}|\[\[(\w+)\]\]"
-            for d in self._extract_article_onebyone():
+            for d in self.extract_article_onebyone():
                 matches = re.finditer(regex, d[1], re.MULTILINE)
                 for matchNum, match in enumerate(matches):
                     if match is not None and matchNum is not None:
@@ -117,7 +117,7 @@ class WikiExt:
         with open(outfile, 'w', encoding='utf-8') as output:
             if type == "csv":
                 writer = csv.writer(output)
-            for d in self._extract_article_onebyone():
+            for d in self.extract_article_onebyone():
                 title, context = self._clean(d)
                 context = clean_all(context)
                 if type == "csv":
@@ -131,7 +131,7 @@ class WikiExt:
             if type == "csv":
                 writer = csv.writer(output)
             regex = r"\[\[Category:\w*\]\]"
-            for d in self._extract_article_onebyone():
+            for d in self.extract_article_onebyone():
                 matches = re.finditer(regex, d[1], re.MULTILINE)
                 for matchNum, match in enumerate(matches):
                     if match is not None and matchNum is not None:
